@@ -1,7 +1,7 @@
-import { GeoJSON } from "react-leaflet";
+import { GeoJSON, Popup, CircleMarker } from "react-leaflet";
 import L from "leaflet";
 const circleMarkerOptions = {
-  radius: 10,
+  radius: 5,
   stroke: true,
   color: "green",
   weight: 2,
@@ -11,7 +11,7 @@ const circleMarkerOptions = {
   fillOpacity: 0.5,
 };
 const circleMarkerOptions2 = {
-  radius: 50,
+  radius: 5,
   stroke: true,
   color: "orange",
   weight: 2,
@@ -21,8 +21,8 @@ const circleMarkerOptions2 = {
   fillOpacity: 0.5,
 };
 function pointToLayer(feature, latlng) {
-  console.log(`feature do properties: `, feature.properties);
-  console.log(`feature do properties: `, feature.properties);
+  // console.log(`feature do properties: `, feature.properties);
+  // console.log(`feature do properties: `, feature.properties);
 
   if (feature.properties.COUNTY === "Washington") {
     return L.circleMarker(latlng, circleMarkerOptions2);
@@ -31,7 +31,13 @@ function pointToLayer(feature, latlng) {
 }
 
 function GeoJSONLayer({ data }) {
-  return <GeoJSON data={data} pointToLayer={pointToLayer}></GeoJSON>;
+  console.log(`data: `, data);
+  return (
+    <GeoJSON data={data} pointToLayer={pointToLayer}>
+      Before
+      <Popup>{data.properties}</Popup>
+    </GeoJSON>
+  );
 }
 
 export default GeoJSONLayer;

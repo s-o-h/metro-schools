@@ -8,6 +8,9 @@ function App() {
     <>
       <MapPin />
       <Star />
+      <form>
+        <input />
+      </form>
       <MainMap />
     </>
   );

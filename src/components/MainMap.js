@@ -2,6 +2,8 @@ import {
   MapContainer,
   TileLayer,
   Marker,
+  FeatureGroup,
+  Circle,
   Popup,
   CircleMarker,
 } from "react-leaflet";
@@ -38,9 +40,62 @@ function MainMap() {
           A prettyCOOL CSS3 popup. <br /> Easily customizable.
         </Popup>
       </CircleMarker>
-      <GeoJSONLayer data={schoolsData.features}></GeoJSONLayer>
+
+      {schoolsData?.features.map(({ properties, geometry }) => {
+        const {
+          FID,
+          SCHOOL_ID,
+          SCHINSTID,
+          DISTINSTID,
+          NCESSCHID,
+          NCESDISTID,
+          SITE_ID,
+          PRIMARYUSE,
+          NAME,
+          ADDRESS,
+          ADDRESS2,
+          CITY,
+          STATE,
+          ZIPCODE,
+          ZIP4,
+          PHONE,
+          LEVEL_NO,
+          LEVEL_NAME,
+          DIST_NO,
+          DISTRICT,
+          GRADE,
+          TYPE,
+          COUNTY,
+          UPDATEDATE,
+        } = properties;
+
+        const { type, coordinates } = geometry;
+        return (
+          <FeatureGroup color="purple" key={FID}>
+            <Popup>
+              <p>{NAME}</p>
+              <p>
+                {ADDRESS} {CITY}, {STATE}, {ZIPCODE}
+              </p>
+              <button>More Info</button>
+            </Popup>
+            <Circle
+              center={[geometry.coordinates[1], geometry.coordinates[0]]}
+              fillColor="#ff7800"
+              radius={500}
+              color={"#000"}
+              weight={1}
+              opacity={1}
+              fillOpacity={0.8}
+            />
+          </FeatureGroup>
+        );
+      })}
     </MapContainer>
   );
 }
 
+{
+  /* <GeoJSONLayer data={schoolsData?.features}></GeoJSONLayer> */
+}
 export default MainMap;
