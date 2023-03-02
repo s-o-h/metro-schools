@@ -1,18 +1,14 @@
 import "./App.css";
-
-import { MapPin, Star } from "react-feather";
 import MainMap from "./components/MainMap";
+import FeatureForm from "./components/FeatureForm";
+import SchoolsProvider from "./components/SchoolsProvider";
 
 function App() {
   return (
-    <>
-      <MapPin />
-      <Star />
-      <form>
-        <input />
-      </form>
+    <SchoolsProvider>
+      <FeatureForm />
       <MainMap />
-    </>
+    </SchoolsProvider>
   );
 }
 
