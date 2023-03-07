@@ -7,7 +7,7 @@ function SchoolsProvider({ children }) {
   const initialSchools = schoolsData?.features;
   const [schools, setSchools] = React.useState(initialSchools);
 
-  const value = { schools, setSchools };
+  const value = { initialSchools, schools, setSchools };
 
   return (
     <SchoolsContext.Provider value={value}>{children}</SchoolsContext.Provider>
