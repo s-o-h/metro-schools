@@ -8,6 +8,7 @@ function FeatureForm() {
   const typeArray = arrayFromSet(initialSchools, "TYPE");
   const gradeArray = arrayFromSet(initialSchools, "GRADE");
   const districtArray = arrayFromSet(initialSchools, "DISTRICT");
+  console.log(`districtArray: `, districtArray);
   const levelNameArray = arrayFromSet(initialSchools, "LEVEL_NAME");
   const zipCodeArray = arrayFromSet(initialSchools, "ZIP_CODE");
   const cityArray = arrayFromSet(initialSchools, "CITY");
@@ -39,6 +40,17 @@ function FeatureForm() {
     setProperty(newValue);
   }
 
+  // Examples
+  // const setA = new Set([1, 2, 3, 4]);
+  // const setB = new Set([2, 3]);
+  // const setC = new Set([3, 4, 5, 6]);
+
+  // isSuperset(setA, setB); // returns true
+  // union(setA, setC); // returns Set {1, 2, 3, 4, 5, 6}
+  // intersection(setA, setC); // returns Set {3, 4}
+  // symmetricDifference(setA, setC); // returns Set {1, 2, 5, 6}
+  // difference(setA, setC); // returns Set {1, 2}
+
   function handleSubmit(event) {
     event.preventDefault();
     // setSchools(newSchools);
@@ -59,6 +71,21 @@ function FeatureForm() {
           value={zipCode}
           onChange={(event) => setZipCode(event.target.value)}
         />
+      </div>
+      <div>
+        <label htmlFor="district-select">Select a district</label>
+        <select
+          id={`district - select`}
+          value={"district"}
+          onChange={() => console.log(`select district`)}
+        >
+          <option value="">--Select a District--</option>
+          <optgroup label="districts">
+            {districtArray.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </optgroup>
+        </select>
       </div>
       <fieldset>
         <legend>Select 'Name Here'</legend>
