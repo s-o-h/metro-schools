@@ -1,5 +1,8 @@
 import React from "react";
 import { SchoolsContext } from "./SchoolsProvider";
+import CheckboxGroup from "./CheckboxGroup";
+import RadioGroup from "./RadioGroup";
+import SelectGroup from "./SelectGroup";
 
 function FeatureForm() {
   const { initialSchools, schools, setSchools } =
@@ -72,60 +75,13 @@ function FeatureForm() {
           onChange={(event) => setZipCode(event.target.value)}
         />
       </div>
-      <div>
-        <label htmlFor="district-select">Select a district</label>
-        <select
-          id={`district - select`}
-          value={"district"}
-          onChange={() => console.log(`select district`)}
-        >
-          <option value="">--Select a District--</option>
-          <optgroup label="districts">
-            {districtArray.map((option) => (
-              <option value={option}>{option}</option>
-            ))}
-          </optgroup>
-        </select>
-      </div>
-      <fieldset>
-        <legend>Select 'Name Here'</legend>
-        {levelNameArray.map((option) => (
-          <div key={option}>
-            <input
-              type="checkbox"
-              id={option}
-              value={option}
-              checked={true}
-              onChange={() => console.log(`${option} changed`)}
-            />
-            <label htmlFor={option}>{option}</label>
-          </div>
-        ))}
-      </fieldset>
-      <fieldset>
-        <legend>Select County</legend>
-        {countyArray.map((option2) => (
-          <div key={option2}>
-            <input
-              type="radio"
-              name="current-county"
-              id={option2}
-              value={option2}
-              checked={option2 === county}
-              onChange={(event) =>
-                handleRadioChange(
-                  event,
-                  initialSchools,
-                  setSchools,
-                  "COUNTY",
-                  setCounty
-                )
-              }
-            />
-            <label htmlFor={option2}>{option2}</label>
-          </div>
-        ))}
-      </fieldset>
+      <SelectGroup valuesArray={districtArray} />
+      <CheckboxGroup valuesArray={levelNameArray} />
+      <RadioGroup
+        state={county}
+        setState={setCounty}
+        valuesArray={countyArray}
+      />
     </form>
   );
 }
