@@ -1,8 +1,8 @@
-function CheckboxGroup({ valuesArray }) {
+function CheckboxGroup({ options }) {
   return (
     <fieldset>
       <legend>Select 'Name Here'</legend>
-      {valuesArray.map((option) => (
+      {options.map((option) => (
         <div key={option}>
           <input
             type="checkbox"

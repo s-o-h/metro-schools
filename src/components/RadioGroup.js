@@ -8,11 +8,11 @@ function handleRadioChange(event, initialData, setData, property, setProperty) {
   setProperty(newValue);
 }
 
-function RadioGroup({ state, setState, valuesArray }) {
+function RadioGroup({ state, setState, options }) {
   return (
     <fieldset>
       <legend>Select County</legend>
-      {valuesArray.map((option) => (
+      {options.map((option) => (
         <div key={option}>
           <input
             type="radio"
