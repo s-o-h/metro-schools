@@ -11,12 +11,15 @@ function SelectGroup({ propertyName, options }) {
     selectedSetFromOptions,
   } = React.useContext(SchoolsContext);
 
+  // console.log(`selectedOptions from render: `, selectedOptions);
+  selectedSetFromOptions(initialSchools, selectedOptions);
+
   function handleChange(event) {
-    console.log(event.target.value);
-    console.log(`selectedOptions: `, selectedOptions);
+    // console.log(event.target.value);
+    // console.log(`selectedOptions: `, selectedOptions);
     const newOptions = { ...selectedOptions };
     newOptions[propertyName] = event.target.value;
-    console.log(`newOptions: `, newOptions);
+    // console.log(`newOptions: `, newOptions);
     selectedSetFromOptions(initialSchools, selectedOptions);
     setSelectedOptions(newOptions);
   }

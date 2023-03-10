@@ -8,7 +8,7 @@ function FeatureForm() {
   const { schools, setSchools, filterOptions } =
     React.useContext(SchoolsContext);
 
-  const { counties, types, grades, districts, levelNames, zipCodes, cities } =
+  const { COUNTIES, TYPES, GRADES, DISTRICTS, LEVEL_NAMES, ZIPCODES, CITIES } =
     filterOptions;
 
   function handleSubmit(event) {
@@ -18,15 +18,16 @@ function FeatureForm() {
   return (
     <form onSubmit={handleSubmit}>
       <p>Feature Form</p>
-      <SelectGroup propertyName={"city"} options={cities} />
-      <SelectGroup propertyName={"county"} options={counties} />
-      <SelectGroup propertyName={"district"} options={districts} />
-      <SelectGroup propertyName={"grade"} options={grades} />
-      <SelectGroup propertyName={"levelName"} options={levelNames} />
-      <SelectGroup propertyName={"type"} options={types} />
-      <SelectGroup propertyName={"zipCode"} options={zipCodes} />
+      <SelectGroup propertyName={"CITY"} options={CITIES} />
+      <SelectGroup propertyName={"DISTRICT"} options={DISTRICTS} />
     </form>
   );
 }
 
+// <SelectGroup propertyName={"county"} options={counties} />
+// <SelectGroup propertyName={"district"} options={districts} />
+// <SelectGroup propertyName={"grade"} options={grades} />
+// <SelectGroup propertyName={"levelName"} options={levelNames} />
+// <SelectGroup propertyName={"type"} options={types} />
+// <SelectGroup propertyName={"zipCode"} options={zipCodes} />
 export default FeatureForm;

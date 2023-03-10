@@ -16,23 +16,23 @@ function SchoolsProvider({ children }) {
   const cityArray = arrayFromSet(initialSchools, "CITY");
 
   const filterOptions = {
-    counties: countyArray,
-    types: typeArray,
-    grades: gradeArray,
-    districts: districtArray,
-    levelNames: levelNameArray,
-    zipCodes: zipCodeArray,
-    cities: cityArray,
+    COUNTIES: countyArray,
+    TYPES: typeArray,
+    GRADES: gradeArray,
+    DISTRICTS: districtArray,
+    LEVEL_NAMES: levelNameArray,
+    ZIPCODES: zipCodeArray,
+    CITIES: cityArray,
   };
 
   const initialOptions = {
-    county: "",
-    type: "",
-    grade: "",
-    district: "",
-    levelName: "",
-    zipCode: "",
-    city: "",
+    COUNTY: "",
+    TYPE: "",
+    GRADE: "",
+    DISTRICT: "",
+    LEVEL_NAME: "",
+    ZIPCODE: "",
+    CITY: "",
   };
 
   const [selectedOptions, setSelectedOptions] = React.useState(initialOptions);
@@ -57,14 +57,32 @@ function SchoolsProvider({ children }) {
   }
 
   function selectedSetFromOptions(totalSet, selectedOptions) {
+    const testSet = new Set();
+    console.log(`testSet: `, testSet);
     for (const property in selectedOptions) {
+      console.log(`selectedSetFromOptions!!!`);
       console.log(`${property}: ${selectedOptions[property]}`);
-
+      //take all schools
+      //and for each property - i.e. CITY
+      //check each school
+      //if the selected value of the property i.e. Gresham for CITY
+      //is equal to the value of the property for a specific school
+      //i.e. FID 5 Mt.Hood CC
+      //add to filteredSet
       // const filteredSet = totalSet.filter(
-      //   (item) => item[property] === selectedOptions[property]
+      //   (item) => item.properties[property] === selectedOptions[property]
       // );
-      // console.log(filteredSet);
+      totalSet.map((item) => {
+        if (item.properties[property] === selectedOptions[property]) {
+          console.log(`success!!!`);
+          testSet.add(item);
+        }
+      });
+      // console.log(`filteredSet: `, filteredSet);
+      // console.log(`adding filteredSet ot testSet`);
+      // testSet.add(filteredSet);
     }
+    console.log(`testSet after for ... in loop: `, testSet);
   }
 
   const value = {
