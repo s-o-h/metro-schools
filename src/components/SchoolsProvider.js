@@ -37,6 +37,9 @@ function SchoolsProvider({ children }) {
 
   const [selectedOptions, setSelectedOptions] = React.useState(initialOptions);
 
+  const initialAvailableOptions = getAvailableOptions(initialSchools);
+  console.log(`initialAvailableOptions: `, initialAvailableOptions);
+
   // Examples
   // const setA = new Set([1, 2, 3, 4]);
   // const setB = new Set([2, 3]);
@@ -73,6 +76,26 @@ function SchoolsProvider({ children }) {
     return [...newSet];
 
     //filter through this new set and
+  }
+
+  function getAvailableOptions(schools) {
+    const schoolItem = schools[0]?.properties;
+    console.log(`schoolItem: `, schoolItem);
+
+    const schoolProperties = Object.keys(schoolItem);
+    console.log(`schoolProperties: `, schoolProperties);
+
+    const nextAvailableOptions = {};
+    schoolProperties.map((propertyName) => {
+      const optionsArray = optionsArrayFromProperty(schools, propertyName);
+      console.log(`optionsArray from ${propertyName}: `, optionsArray);
+      nextAvailableOptions[propertyName] = optionsArray;
+      console.log(`nextAvailableOptions in .map: `, nextAvailableOptions);
+      return optionsArray;
+    });
+    console.log(`nextAvailableOptions after .map: `, nextAvailableOptions);
+
+    return nextAvailableOptions;
   }
 
   function selectedSetFromOptions(totalSet, selectedOptions) {
@@ -120,6 +143,7 @@ function SchoolsProvider({ children }) {
     setSelectedOptions,
     selectedSetFromOptions,
     getSchools,
+    getAvailableOptions,
   };
 
   return (

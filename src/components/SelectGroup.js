@@ -10,10 +10,11 @@ function SelectGroup({ propertyName, options }) {
     setSelectedOptions,
     selectedSetFromOptions,
     getSchools,
+    getAvailableOptions,
   } = React.useContext(SchoolsContext);
 
   // console.log(`selectedOptions from render: `, selectedOptions);
-  selectedSetFromOptions(initialSchools, selectedOptions);
+  // selectedSetFromOptions(initialSchools, selectedOptions);
 
   function handleChange(event) {
     const nextValue = event.target.value;
@@ -22,14 +23,16 @@ function SelectGroup({ propertyName, options }) {
       [propertyName]: nextValue,
     };
     // get schools from selected options
-    const newSchools = getSchools(schools, propertyName, nextValue);
-    console.log(`newSchools: `, newSchools);
+    const nextSchools = getSchools(schools, propertyName, nextValue);
+    console.log(`nextSchools: `, nextSchools);
 
     // update available options based on schools
+    const nextAvailableOptions = getAvailableOptions(nextSchools);
+    console.log(`nextAvailableOptions: `, nextAvailableOptions);
     // setSelectedOptions
-    setSelectedOptions(nextSelectedOptions);
+    // setSelectedOptions(nextSelectedOptions);
     // setSchools
-    setSchools(newSchools);
+    // setSchools(nextSchools);
     // setAvailableOptions
     // console.log(`schools: `, schools);
     // newSetFromSelectedOption(schools, propertyName, event.target.value);
