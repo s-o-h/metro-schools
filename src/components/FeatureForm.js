@@ -5,11 +5,11 @@ import RadioGroup from "./RadioGroup";
 import SelectGroup from "./SelectGroup";
 
 function FeatureForm() {
-  const { schools, setSchools, filterOptions } =
+  const { schools, setSchools, availableOptions } =
     React.useContext(SchoolsContext);
 
   const { COUNTIES, TYPES, GRADES, DISTRICTS, LEVEL_NAMES, ZIPCODES, CITIES } =
-    filterOptions;
+    availableOptions;
 
   function handleSubmit(event) {
     event.preventDefault();

@@ -7,15 +7,15 @@ function SchoolsProvider({ children }) {
   const initialSchools = schoolsData?.features;
   const [schools, setSchools] = React.useState(initialSchools);
 
-  const countyArray = arrayFromSet(initialSchools, "COUNTY");
-  const typeArray = arrayFromSet(initialSchools, "TYPE");
-  const gradeArray = arrayFromSet(initialSchools, "GRADE");
-  const districtArray = arrayFromSet(initialSchools, "DISTRICT");
-  const levelNameArray = arrayFromSet(initialSchools, "LEVEL_NAME");
-  const zipCodeArray = arrayFromSet(initialSchools, "ZIPCODE");
-  const cityArray = arrayFromSet(initialSchools, "CITY");
+  const countyArray = optionsArrayFromProperty(initialSchools, "COUNTY");
+  const typeArray = optionsArrayFromProperty(initialSchools, "TYPE");
+  const gradeArray = optionsArrayFromProperty(initialSchools, "GRADE");
+  const districtArray = optionsArrayFromProperty(initialSchools, "DISTRICT");
+  const levelNameArray = optionsArrayFromProperty(initialSchools, "LEVEL_NAME");
+  const zipCodeArray = optionsArrayFromProperty(initialSchools, "ZIPCODE");
+  const cityArray = optionsArrayFromProperty(initialSchools, "CITY");
 
-  const filterOptions = {
+  const availableOptions = {
     COUNTIES: countyArray,
     TYPES: typeArray,
     GRADES: gradeArray,
@@ -48,17 +48,41 @@ function SchoolsProvider({ children }) {
   // symmetricDifference(setA, setC); // returns Set {1, 2, 5, 6}
   // difference(setA, setC); // returns Set {1, 2}
 
-  function arrayFromSet(data, propertyName) {
-    const dataSet = new Set(data.map((item) => item.properties[propertyName]));
-    dataSet.delete(null);
-    const uniqueArray = [...dataSet];
+  function optionsSetFromProperty(data, propertyName) {
+    const set = new Set(data.map((item) => item.properties[propertyName]));
+    return set;
+  }
+
+  function arrayFromSet(set) {
+    set.delete(null);
+    const uniqueArray = [...set];
     const sortedArray = uniqueArray.sort();
     return sortedArray;
   }
 
+  function optionsArrayFromProperty(data, propertyName) {
+    const set = optionsSetFromProperty(data, propertyName);
+    const optionsArray = arrayFromSet(set);
+    return optionsArray;
+  }
+
+  function getSchools(schools, propertyName, option) {
+    const newSet = new Set(
+      schools.filter((item) => item.properties[propertyName] === option)
+    );
+    return [...newSet];
+
+    //filter through this new set and
+  }
+
   function selectedSetFromOptions(totalSet, selectedOptions) {
-    const testSet = new Set();
-    console.log(`testSet: `, testSet);
+    const filteredSet = new Set();
+    const newSet = [...totalSet];
+    let setArray = [];
+    console.log(`setArray before loop: `, setArray);
+    // console.log(`totalSet: `, totalSet);
+    // console.log(`newSet: `, newSet);
+    // console.log(`filteredSet: `, filteredSet);
     for (const property in selectedOptions) {
       console.log(`selectedSetFromOptions!!!`);
       console.log(`${property}: ${selectedOptions[property]}`);
@@ -69,30 +93,33 @@ function SchoolsProvider({ children }) {
       //is equal to the value of the property for a specific school
       //i.e. FID 5 Mt.Hood CC
       //add to filteredSet
-      // const filteredSet = totalSet.filter(
-      //   (item) => item.properties[property] === selectedOptions[property]
-      // );
-      totalSet.map((item) => {
-        if (item.properties[property] === selectedOptions[property]) {
-          console.log(`success!!!`);
-          testSet.add(item);
-        }
-      });
-      // console.log(`filteredSet: `, filteredSet);
-      // console.log(`adding filteredSet ot testSet`);
-      // testSet.add(filteredSet);
+
+      // totalSet.map((item) => {
+      //   if (item.properties[property] === selectedOptions[property]) {
+      //     console.log(`success!!!`);
+      //     filteredSet.add(item);
+      //   }
+      // });
+      const selectedSet = totalSet.filter(
+        (item) => item.properties[property] === selectedOptions[property]
+      );
+      setArray.push(selectedSet);
     }
-    console.log(`testSet after for ... in loop: `, testSet);
+    //console.log(`filteredSet after for ... in loop: `, filteredSet);
+    console.log(`setArray after loop: `, setArray);
+    const setObject = { ...setArray };
+    console.log(setObject);
   }
 
   const value = {
     initialSchools,
     schools,
     setSchools,
-    filterOptions,
+    availableOptions,
     selectedOptions,
     setSelectedOptions,
     selectedSetFromOptions,
+    getSchools,
   };
 
   return (
