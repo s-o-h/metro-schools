@@ -1,27 +1,29 @@
 import React from "react";
 import { SchoolsContext } from "./SchoolsProvider";
 
-function SelectGroup({ propertyName, options }) {
+function SelectGroup({ propertyName }) {
   const {
-    initialSchools,
     schools,
     setSchools,
+    getSchools,
     selectedOptions,
     setSelectedOptions,
-    selectedSetFromOptions,
-    getSchools,
+    availableOptions,
+    setAvailableOptions,
     getAvailableOptions,
   } = React.useContext(SchoolsContext);
 
-  // console.log(`selectedOptions from render: `, selectedOptions);
-  // selectedSetFromOptions(initialSchools, selectedOptions);
+  const options = availableOptions[propertyName];
 
   function handleChange(event) {
+    //update selected options based on select change
     const nextValue = event.target.value;
     const nextSelectedOptions = {
       ...selectedOptions,
       [propertyName]: nextValue,
     };
+    console.log(`nextSelectedOptions: `, nextSelectedOptions);
+
     // get schools from selected options
     const nextSchools = getSchools(schools, propertyName, nextValue);
     console.log(`nextSchools: `, nextSchools);
@@ -29,23 +31,14 @@ function SelectGroup({ propertyName, options }) {
     // update available options based on schools
     const nextAvailableOptions = getAvailableOptions(nextSchools);
     console.log(`nextAvailableOptions: `, nextAvailableOptions);
+
     // setSelectedOptions
-    // setSelectedOptions(nextSelectedOptions);
+    setSelectedOptions(nextSelectedOptions);
     // setSchools
-    // setSchools(nextSchools);
+    setSchools(nextSchools);
     // setAvailableOptions
-    // console.log(`schools: `, schools);
-    // newSetFromSelectedOption(schools, propertyName, event.target.value);
+    setAvailableOptions(nextAvailableOptions);
   }
-  // function handleChange(event) {
-  //   // console.log(event.target.value);
-  //   // console.log(`selectedOptions: `, selectedOptions);
-  //   const newOptions = { ...selectedOptions };
-  //   newOptions[propertyName] = event.target.value;
-  //   // console.log(`newOptions: `, newOptions);
-  //   selectedSetFromOptions(initialSchools, selectedOptions);
-  //   setSelectedOptions(newOptions);
-  // }
 
   return (
     <div>
@@ -56,7 +49,7 @@ function SelectGroup({ propertyName, options }) {
         onChange={(event) => handleChange(event)}
       >
         <option value="">-- select a {propertyName} --</option>
-        <optgroup label="districts">
+        <optgroup label={`select a ${propertyName}`}>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
