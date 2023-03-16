@@ -33,6 +33,8 @@ function arrayFromSet(set) {
 function optionsArrayFromProperty(data, propertyName) {
   const set = optionsSetFromProperty(data, propertyName);
   const optionsArray = arrayFromSet(set);
+  //TODO account for options with no items
+  //TODO create count for each item
   return optionsArray;
 }
 
@@ -45,20 +47,21 @@ function getSchools(schools, propertyName, option) {
 
 function SchoolsProvider({ children }) {
   const [schools, setSchools] = React.useState(initialSchools);
-  // const schoolItem = schools[0]?.properties;
-  // const schoolsKeys = Object.keys(schoolItem);
-  // console.log(`schools keys: `, schoolsKeys);
-  // const keysObject = { ...schoolsKeys };
-  // console.log(`keysObject: `, keysObject);
-  const initialSelectedOptions = {
-    COUNTY: "",
-    TYPE: "",
-    GRADE: "",
-    DISTRICT: "",
-    LEVEL_NAME: "",
-    ZIPCODE: "",
-    CITY: "",
-  };
+  const schoolItem = schools[0]?.properties;
+  const schoolsKeys = Object.keys(schoolItem);
+  const initialSelectedOptions = schoolsKeys.reduce((accumulator, value) => {
+    return { ...accumulator, [value]: "" };
+  }, {});
+
+  // const initialSelectedOptions = {
+  //   COUNTY: "",
+  //   TYPE: "",
+  //   GRADE: "",
+  //   DISTRICT: "",
+  //   LEVEL_NAME: "",
+  //   ZIPCODE: "",
+  //   CITY: "",
+  // };
   const [selectedOptions, setSelectedOptions] = React.useState(
     initialSelectedOptions
   );

@@ -50,11 +50,15 @@ function SelectGroup({ propertyName }) {
       >
         <option value="">-- select a {propertyName} --</option>
         <optgroup label={`select a ${propertyName}`}>
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
+          {
+            //TODO disable options with no items
+            // { value, disabled: true, count: 0}
+            options.map((option) => (
+              <option key={option} value={option} disabled={false}>
+                {option}
+              </option>
+            ))
+          }
         </optgroup>
       </select>
     </div>
