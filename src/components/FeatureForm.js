@@ -13,13 +13,13 @@ function FeatureForm() {
     <form onSubmit={handleSubmit}>
       <p>Feature Form</p>
       <SelectGroup propertyName={"CITY"} />
-      <SelectGroup propertyName={"DISTRICT"} />
+      {/* <SelectGroup propertyName={"DISTRICT"} />
       <SelectGroup propertyName={"COUNTY"} />
       <SelectGroup propertyName={"DISTRICT"} />
       <SelectGroup propertyName={"GRADE"} />
       <SelectGroup propertyName={"LEVEL_NAME"} />
       <SelectGroup propertyName={"TYPE"} />
-      <SelectGroup propertyName={"ZIPCODE"} />
+      <SelectGroup propertyName={"ZIPCODE"} /> */}
     </form>
   );
 }

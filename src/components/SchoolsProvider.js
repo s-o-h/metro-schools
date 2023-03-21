@@ -4,12 +4,18 @@ import schoolsData from "./../data/schools.json";
 export const SchoolsContext = React.createContext();
 const initialSchools = schoolsData?.features;
 
-function getAvailableOptions(schools) {
+function getSchoolPropertyNames(schools) {
   const schoolItem = schools[0]?.properties;
-  const schoolProperties = Object.keys(schoolItem);
+  const schoolPropertyNames = Object.keys(schoolItem);
+
+  return schoolPropertyNames;
+}
+
+function getAvailableOptions(schools) {
+  const schoolPropertyNames = getSchoolPropertyNames(schools);
 
   const nextAvailableOptions = {};
-  schoolProperties.map((propertyName) => {
+  schoolPropertyNames.map((propertyName) => {
     const optionsArray = optionsArrayFromProperty(schools, propertyName);
     nextAvailableOptions[propertyName] = optionsArray;
     return optionsArray;
@@ -18,8 +24,62 @@ function getAvailableOptions(schools) {
   return nextAvailableOptions;
 }
 
-function optionsSetFromProperty(data, propertyName) {
-  const set = new Set(data.map((item) => item.properties[propertyName]));
+function getAllOptions(schools) {
+  const schoolPropertyNames = getSchoolPropertyNames(schools);
+
+  const nextAllOptions = {};
+  // i.e. propertyName === 'CITY'
+  const testProperty = ["CITY"];
+  // schoolPropertyNames.map((propertyName) => {
+  testProperty.map((propertyName) => {
+    const set = new Set(schools.map((item) => item.properties[propertyName]));
+    set.delete(null);
+    const uniqueArray = [...set];
+    const optionsArray = uniqueArray.sort();
+
+    console.log(`optionsArray in getAllOptions: `, optionsArray);
+    // {
+    // city: ['ALOHA', 'BANKS', etc ...]
+    //}
+    const objectArray = optionsArray.map((option) => {
+      const includesSchool = schools.filter(
+        (item) => item.properties[propertyName] === option
+      );
+      const schoolCount = includesSchool.length;
+      const optionIsDisabled = schoolCount === 0 ? true : false;
+
+      const object = {
+        value: option,
+        count: schoolCount,
+        disabled: optionIsDisabled,
+      };
+      return object;
+    });
+    nextAllOptions[propertyName] = objectArray;
+    // console.log(`objectArray in getAllOptions: `, objectArray);
+    return objectArray;
+  });
+
+  return nextAllOptions;
+}
+
+// function getAllOptions(schools) {
+//   const schoolPropertyNames = getSchoolPropertyNames(schools);
+//   const nextAllOptions = {};
+
+//   schoolPropertyNames.map((propertyName) => {
+//     const set = optionsSetFromProperty(schools, propertyName);
+//     const uniqueArray = [...set];
+//     const sortedArray = uniqueArray.sort();
+//     nextAllOptions[propertyName] = sortedArray;
+//     return sortedArray;
+//   });
+
+//   return nextAllOptions;
+// }
+
+function optionsSetFromProperty(schools, propertyName) {
+  const set = new Set(schools.map((item) => item.properties[propertyName]));
   return set;
 }
 
@@ -30,8 +90,8 @@ function arrayFromSet(set) {
   return sortedArray;
 }
 
-function optionsArrayFromProperty(data, propertyName) {
-  const set = optionsSetFromProperty(data, propertyName);
+function optionsArrayFromProperty(schools, propertyName) {
+  const set = optionsSetFromProperty(schools, propertyName);
   const optionsArray = arrayFromSet(set);
   //TODO account for options with no items
   //TODO create count for each item
@@ -47,27 +107,24 @@ function getSchools(schools, propertyName, option) {
 
 function SchoolsProvider({ children }) {
   const [schools, setSchools] = React.useState(initialSchools);
-  const schoolItem = schools[0]?.properties;
-  const schoolsKeys = Object.keys(schoolItem);
-  const initialSelectedOptions = schoolsKeys.reduce((accumulator, value) => {
-    return { ...accumulator, [value]: "" };
-  }, {});
 
-  // const initialSelectedOptions = {
-  //   COUNTY: "",
-  //   TYPE: "",
-  //   GRADE: "",
-  //   DISTRICT: "",
-  //   LEVEL_NAME: "",
-  //   ZIPCODE: "",
-  //   CITY: "",
-  // };
+  const schoolPropertyNames = getSchoolPropertyNames(schools);
+  const initialSelectedOptions = schoolPropertyNames.reduce(
+    (accumulator, value) => {
+      return { ...accumulator, [value]: "" };
+    },
+    {}
+  );
   const [selectedOptions, setSelectedOptions] = React.useState(
     initialSelectedOptions
   );
 
   const initialAvailableOptions = getAvailableOptions(initialSchools);
   const [availableOptions, setAvailableOptions] = React.useState(
+    initialAvailableOptions
+  );
+
+  const [allAvailableOptions, setAllAvailableOptions] = React.useState(
     initialAvailableOptions
   );
 
@@ -80,6 +137,7 @@ function SchoolsProvider({ children }) {
     availableOptions,
     setAvailableOptions,
     getAvailableOptions,
+    getAllOptions,
   };
 
   return (

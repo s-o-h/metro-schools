@@ -11,6 +11,7 @@ function SelectGroup({ propertyName }) {
     availableOptions,
     setAvailableOptions,
     getAvailableOptions,
+    getAllOptions,
   } = React.useContext(SchoolsContext);
 
   const options = availableOptions[propertyName];
@@ -31,6 +32,10 @@ function SelectGroup({ propertyName }) {
     // update available options based on schools
     const nextAvailableOptions = getAvailableOptions(nextSchools);
     console.log(`nextAvailableOptions: `, nextAvailableOptions);
+
+    //test allOptions
+    const allOptions = getAllOptions(schools);
+    console.log(`allOptions: `, allOptions);
 
     // setSelectedOptions
     setSelectedOptions(nextSelectedOptions);
