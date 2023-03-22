@@ -11,10 +11,33 @@ function SelectGroup({ propertyName }) {
     availableOptions,
     setAvailableOptions,
     getAvailableOptions,
-    getAllOptions,
   } = React.useContext(SchoolsContext);
 
   const options = availableOptions[propertyName];
+
+  function getOptionObjects(schools, propertyName, options) {
+    const optionObjectsArray = options.map((option) => {
+      const matchingSchools = schools.filter((school) => {
+        return school.properties[propertyName] === option;
+      });
+
+      const value = option;
+      const count = matchingSchools.length;
+      const disabled = count === 0 ? true : false;
+
+      const optionObject = { value, count, disabled };
+
+      return optionObject;
+    });
+    console.log(`optionObjectsArray in function: `, optionObjectsArray);
+    return optionObjectsArray;
+  }
+
+  console.log(`checking optionObjectsArray`);
+  const optionObjectsArray = getOptionObjects(schools, propertyName, options);
+  console.log(`optionObjectsArray: `, optionObjectsArray);
+  const [optionObjects, setOptionObjects] = React.useState(optionObjectsArray);
+  console.log(`optionObjects atTop: `, optionObjects);
 
   function handleChange(event) {
     //update selected options based on select change
@@ -33,16 +56,22 @@ function SelectGroup({ propertyName }) {
     const nextAvailableOptions = getAvailableOptions(nextSchools);
     console.log(`nextAvailableOptions: `, nextAvailableOptions);
 
-    //test allOptions
-    const allOptions = getAllOptions(schools);
-    console.log(`allOptions: `, allOptions);
+    //test option objects on handle change
+    const nextOptionObjects = getOptionObjects(
+      nextSchools,
+      propertyName,
+      options
+    );
+    console.log(`nextOptionObjects: `, nextOptionObjects);
 
     // setSelectedOptions
     setSelectedOptions(nextSelectedOptions);
     // setSchools
     setSchools(nextSchools);
     // setAvailableOptions
-    setAvailableOptions(nextAvailableOptions);
+    // setAvailableOptions(nextAvailableOptions);
+    //setOptionObjects
+    setOptionObjects(nextOptionObjects);
   }
 
   return (
@@ -61,6 +90,29 @@ function SelectGroup({ propertyName }) {
             options.map((option) => (
               <option key={option} value={option} disabled={false}>
                 {option}
+              </option>
+            ))
+          }
+        </optgroup>
+      </select>
+      <div>BREAK</div>
+      <select
+        id={`${propertyName}-select`}
+        value={selectedOptions[propertyName]}
+        onChange={(event) => handleChange(event)}
+      >
+        <option value="">-- select a {propertyName} --</option>
+        <optgroup label={`select a ${propertyName}`}>
+          {
+            //TODO disable options with no items
+            // { value, disabled: true, count: 0}
+            optionObjects.map((object) => (
+              <option
+                key={object.value}
+                value={object.value}
+                disabled={object.disabled}
+              >
+                value: {object.value}: ({object.count})
               </option>
             ))
           }

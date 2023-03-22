@@ -24,60 +24,6 @@ function getAvailableOptions(schools) {
   return nextAvailableOptions;
 }
 
-function getAllOptions(schools) {
-  const schoolPropertyNames = getSchoolPropertyNames(schools);
-
-  const nextAllOptions = {};
-  // i.e. propertyName === 'CITY'
-  const testProperty = ["CITY"];
-  // schoolPropertyNames.map((propertyName) => {
-  testProperty.map((propertyName) => {
-    const set = new Set(schools.map((item) => item.properties[propertyName]));
-    set.delete(null);
-    const uniqueArray = [...set];
-    const optionsArray = uniqueArray.sort();
-
-    console.log(`optionsArray in getAllOptions: `, optionsArray);
-    // {
-    // city: ['ALOHA', 'BANKS', etc ...]
-    //}
-    const objectArray = optionsArray.map((option) => {
-      const includesSchool = schools.filter(
-        (item) => item.properties[propertyName] === option
-      );
-      const schoolCount = includesSchool.length;
-      const optionIsDisabled = schoolCount === 0 ? true : false;
-
-      const object = {
-        value: option,
-        count: schoolCount,
-        disabled: optionIsDisabled,
-      };
-      return object;
-    });
-    nextAllOptions[propertyName] = objectArray;
-    // console.log(`objectArray in getAllOptions: `, objectArray);
-    return objectArray;
-  });
-
-  return nextAllOptions;
-}
-
-// function getAllOptions(schools) {
-//   const schoolPropertyNames = getSchoolPropertyNames(schools);
-//   const nextAllOptions = {};
-
-//   schoolPropertyNames.map((propertyName) => {
-//     const set = optionsSetFromProperty(schools, propertyName);
-//     const uniqueArray = [...set];
-//     const sortedArray = uniqueArray.sort();
-//     nextAllOptions[propertyName] = sortedArray;
-//     return sortedArray;
-//   });
-
-//   return nextAllOptions;
-// }
-
 function optionsSetFromProperty(schools, propertyName) {
   const set = new Set(schools.map((item) => item.properties[propertyName]));
   return set;
@@ -137,7 +83,6 @@ function SchoolsProvider({ children }) {
     availableOptions,
     setAvailableOptions,
     getAvailableOptions,
-    getAllOptions,
   };
 
   return (
