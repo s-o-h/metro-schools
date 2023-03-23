@@ -70,8 +70,39 @@ function SchoolsProvider({ children }) {
     initialAvailableOptions
   );
 
-  const [allAvailableOptions, setAllAvailableOptions] = React.useState(
-    initialAvailableOptions
+  function getOptionObjects(schools, propertyName) {
+    const options = availableOptions[propertyName];
+    const optionObjectsArray = options.map((option) => {
+      const matchingSchools = schools.filter((school) => {
+        return school.properties[propertyName] === option;
+      });
+
+      const value = option;
+      const count = matchingSchools.length;
+      const disabled = count === 0 ? true : false;
+
+      const optionObject = { value, count, disabled };
+
+      return optionObject;
+    });
+    return optionObjectsArray;
+  }
+
+  function getPropertiesObject(schools, availableOptions) {
+    const propertiesObject = {};
+    for (const propertyName in availableOptions) {
+      const optionObjectsArray = getOptionObjects(schools, propertyName);
+      propertiesObject[propertyName] = optionObjectsArray;
+    }
+    return propertiesObject;
+  }
+
+  const initialSelectPropertiesObject = getPropertiesObject(
+    schools,
+    availableOptions
+  );
+  const [selectPropertiesObject, setSelectPropertiesObject] = React.useState(
+    initialSelectPropertiesObject
   );
 
   const value = {
@@ -83,6 +114,9 @@ function SchoolsProvider({ children }) {
     availableOptions,
     setAvailableOptions,
     getAvailableOptions,
+    getPropertiesObject,
+    selectPropertiesObject,
+    setSelectPropertiesObject,
   };
 
   return (
