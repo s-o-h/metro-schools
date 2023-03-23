@@ -13,13 +13,15 @@ function SelectGroup({ propertyName }) {
     selectPropertiesObject,
     setSelectPropertiesObject,
   } = React.useContext(SchoolsContext);
-  console.log(`selectPropertiesObject: `, selectPropertiesObject);
-  const propertyOptionsObject = selectPropertiesObject[propertyName];
-  console.log(`propertyOptionsObject: `, propertyOptionsObject);
 
-  const portlandSchools = schools.filter((school) => {
-    return school.properties["CITY"] === "PORTLAND";
-  });
+  // console.log(`selectedOptions: `, selectedOptions);
+  // console.log(`selectPropertiesObject: `, selectPropertiesObject);
+  const propertyOptionsObject = selectPropertiesObject[propertyName];
+  // console.log(`propertyOptionsObject: `, propertyOptionsObject);
+
+  // const portlandSchools = schools.filter((school) => {
+  //   return school.properties["CITY"] === "PORTLAND";
+  // });
 
   function handleChange(event) {
     //update selected options based on select change
@@ -57,22 +59,20 @@ function SelectGroup({ propertyName }) {
         value={selectedOptions[propertyName]}
         onChange={(event) => handleChange(event)}
       >
-        <option value="">-- select a {propertyName} --</option>
+        <option key="default" value="">
+          -- select a {propertyName} --
+        </option>
 
         <optgroup label={`select a ${propertyName}`}>
-          {
-            //TODO disable options with no items
-            // { value, disabled: true, count: 0}
-            propertyOptionsObject.map((object) => (
-              <option
-                key={object.value}
-                value={object.value}
-                disabled={object.disabled}
-              >
-                {object.value}: ({object.count})
-              </option>
-            ))
-          }
+          {propertyOptionsObject.map((object) => (
+            <option
+              key={object.value}
+              value={object.value}
+              disabled={object.disabled}
+            >
+              {object.value}: ({object.count})
+            </option>
+          ))}
         </optgroup>
       </select>
     </div>
