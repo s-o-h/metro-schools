@@ -2,7 +2,7 @@ import React from "react";
 import schoolsData from "./../data/schools.json";
 
 export const SchoolsContext = React.createContext();
-const initialSchools = schoolsData?.features;
+const allSchools = schoolsData?.features;
 
 function getSchoolPropertyNames(schools) {
   const schoolItem = schools[0]?.properties;
@@ -39,8 +39,7 @@ function arrayFromSet(set) {
 function optionsArrayFromProperty(schools, propertyName) {
   const set = optionsSetFromProperty(schools, propertyName);
   const optionsArray = arrayFromSet(set);
-  //TODO account for options with no items
-  //TODO create count for each item
+
   return optionsArray;
 }
 
@@ -52,7 +51,7 @@ function getSchools(schools, propertyName, option) {
 }
 
 function SchoolsProvider({ children }) {
-  const [schools, setSchools] = React.useState(initialSchools);
+  const [schools, setSchools] = React.useState(allSchools);
 
   const schoolPropertyNames = getSchoolPropertyNames(schools);
   const initialSelectedOptions = schoolPropertyNames.reduce(
@@ -65,7 +64,7 @@ function SchoolsProvider({ children }) {
     initialSelectedOptions
   );
 
-  const initialAvailableOptions = getAvailableOptions(initialSchools);
+  const initialAvailableOptions = getAvailableOptions(allSchools);
   const [availableOptions, setAvailableOptions] = React.useState(
     initialAvailableOptions
   );
@@ -106,6 +105,7 @@ function SchoolsProvider({ children }) {
   );
 
   const value = {
+    allSchools,
     schools,
     setSchools,
     getSchools,

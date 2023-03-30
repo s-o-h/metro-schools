@@ -14,39 +14,37 @@ function SelectGroup({ propertyName }) {
     setSelectPropertiesObject,
   } = React.useContext(SchoolsContext);
 
-  // console.log(`selectedOptions: `, selectedOptions);
-  // console.log(`selectPropertiesObject: `, selectPropertiesObject);
-  const propertyOptionsObject = selectPropertiesObject[propertyName];
-  // console.log(`propertyOptionsObject: `, propertyOptionsObject);
+  function createOptionGroupLabel(string) {
+    const lastLetter = string.slice(-1);
+    const valueToTest = "Y";
+    const ending = lastLetter === valueToTest ? "IES" : "S";
+    const base =
+      lastLetter === valueToTest ? string.slice(0, string.length - 1) : string;
+    const label = `${base}${ending}`;
 
-  // const portlandSchools = schools.filter((school) => {
-  //   return school.properties["CITY"] === "PORTLAND";
-  // });
+    return label;
+  }
+
+  const optionGroupLabel = createOptionGroupLabel(propertyName);
+
+  const propertyOptionsObject = selectPropertiesObject[propertyName];
 
   function handleChange(event) {
-    //update selected options based on select change
     const nextValue = event.target.value;
     const nextSelectedOptions = {
       ...selectedOptions,
       [propertyName]: nextValue,
     };
-    // console.log(`nextSelectedOptions: `, nextSelectedOptions);
 
-    // get schools from selected options
     const nextSchools = getSchools(schools, propertyName, nextValue);
-    // console.log(`nextSchools: `, nextSchools);
 
-    // update selectProperties options based on schools
     const nextSelectPropertiesObject = getPropertiesObject(
       nextSchools,
       availableOptions
     );
 
-    // setSelectedOptions
     setSelectedOptions(nextSelectedOptions);
-    // setSchools
     setSchools(nextSchools);
-    //setSelectPropertiesObject
     setSelectPropertiesObject(nextSelectPropertiesObject);
   }
 
@@ -59,11 +57,11 @@ function SelectGroup({ propertyName }) {
         value={selectedOptions[propertyName]}
         onChange={(event) => handleChange(event)}
       >
-        <option key="default" value="">
+        <option key="default" disabled={true} value={""}>
           -- select a {propertyName} --
         </option>
 
-        <optgroup label={`select a ${propertyName}`}>
+        <optgroup label={optionGroupLabel}>
           {propertyOptionsObject.map((object) => (
             <option
               key={object.value}

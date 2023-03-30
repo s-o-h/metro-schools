@@ -1,11 +1,10 @@
 import React from "react";
 import { SchoolsContext } from "./SchoolsProvider";
-import CheckboxGroup from "./CheckboxGroup";
-import RadioGroup from "./RadioGroup";
 import SelectGroup from "./SelectGroup";
 
 function FeatureForm() {
   const {
+    allSchools,
     selectedOptions,
     setSelectedOptions,
     getSchools,
@@ -19,55 +18,60 @@ function FeatureForm() {
   function handleSubmit(event) {
     event.preventDefault();
   }
+
   function handleRemoveFilter(propertyName) {
-    console.log(propertyName);
-    console.log("selectedOptions: ", selectedOptions);
     const nextValue = "";
     const nextSelectedOptions = {
       ...selectedOptions,
       [propertyName]: nextValue,
     };
-    console.log(`nextSelectedOptions`, nextSelectedOptions);
 
-    // get schools from selected options
-    const currentSchools = [...schools];
-    //make any option true
-    const nextSchools = getSchools(currentSchools, propertyName, true);
-    console.log(`nextSchools: `, nextSchools);
+    const nextSchoolsFilterProperties = [];
+    for (const propertyName in nextSelectedOptions) {
+      const option = nextSelectedOptions[propertyName];
+      if (option.length > 0) {
+        nextSchoolsFilterProperties.push({ propertyName, option });
+      }
+    }
 
-    // update selectProperties options based on schools
+    const nextSchools = nextSchoolsFilterProperties.reduce(
+      (schools, { propertyName, option }) =>
+        getSchools(schools, propertyName, option),
+      allSchools
+    );
+
     const nextSelectPropertiesObject = getPropertiesObject(
       nextSchools,
       availableOptions
     );
-    console.log(`nextSelectPropertiesObject: `, nextSelectPropertiesObject);
-    // setSelectedOptions
-    // setSelectedOptions(nextSelectedOptions);
-    // setSchools
-    // setSchools(nextSchools);
-    //setSelectPropertiesObject
-    // setSelectPropertiesObject(nextSelectPropertiesObject);
+
+    setSelectedOptions(nextSelectedOptions);
+    setSchools(nextSchools);
+    setSelectPropertiesObject(nextSelectPropertiesObject);
   }
 
   return (
     <form onSubmit={handleSubmit}>
+      <p>{`Schools: ${schools.length}`}</p>
       <p>Feature Form</p>
       <SelectGroup propertyName={"CITY"} />
       <SelectGroup propertyName={"DISTRICT"} />
       <SelectGroup propertyName={"COUNTY"} />
-      <SelectGroup propertyName={"DISTRICT"} />
       <SelectGroup propertyName={"GRADE"} />
       <SelectGroup propertyName={"LEVEL_NAME"} />
       <SelectGroup propertyName={"TYPE"} />
       <SelectGroup propertyName={"ZIPCODE"} />
       <div>
-        {Object.keys(selectedOptions).map((key) => (
-          <div key={key}>
-            <div>key: {key}</div>
-            <div>value: {selectedOptions[key]}</div>
-            <button onClick={() => handleRemoveFilter(key)}>Remove</button>
-          </div>
-        ))}
+        {Object.keys(selectedOptions).map(
+          (key) =>
+            selectedOptions[key] && (
+              <div key={key}>
+                <div>key: {key}</div>
+                <div>value: {selectedOptions[key]}</div>
+                <button onClick={() => handleRemoveFilter(key)}>Remove</button>
+              </div>
+            )
+        )}
       </div>
     </form>
   );
